@@ -1,6 +1,6 @@
 #pragma once
 
-const float DEGTORAD = 0.01745;
+const float DEGTORAD = 0.01745f;
 
 static void WrapCoordinates(const float& inputX, const float& inputY, float& outputX, float& outputY, const float& windowWidth, const float& windowHeight)
 {

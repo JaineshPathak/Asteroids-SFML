@@ -30,19 +30,19 @@ EntityPlayer::EntityPlayer() :
 
 void EntityPlayer::Update(float DeltaTime)
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)	|| sf::Keyboard::isKeyPressed(sf::Keyboard::A))	m_Angle -= m_TurningRate * DeltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) m_Angle += m_TurningRate * DeltaTime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) m_Angle -= m_TurningRate * DeltaTime;
 	
 	m_IsThrust = (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W));
 	if (m_IsThrust)
 	{
-		m_Velocity.x += std::sin(m_Angle * DEGTORAD) * 0.1f * DeltaTime;
-		m_Velocity.y += -std::cos(m_Angle * DEGTORAD) * 0.1f * DeltaTime;
+		m_Velocity.x += std::sin(m_Angle * DEGTORAD) * 0.2f * DeltaTime;
+		m_Velocity.y += -std::cos(m_Angle * DEGTORAD) * 0.2f * DeltaTime;
 	}
 
 	m_Position += m_Velocity;
-
-	WrapCoordinates(m_Position.x, m_Position.y, m_Position.x, m_Position.y, Game::s_MainWindow->getSize().x, Game::s_MainWindow->getSize().y);
+	
+	WrapCoordinates(m_Position.x, m_Position.y, m_Position.x, m_Position.y, (float)Game::s_MainWindow->getSize().x, (float)Game::s_MainWindow->getSize().y);
 
 	m_Sprite.setRotation(m_Angle);
 	m_Sprite.setPosition(m_Position);
