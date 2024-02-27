@@ -80,7 +80,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EntityPlayer.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityPlayer.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

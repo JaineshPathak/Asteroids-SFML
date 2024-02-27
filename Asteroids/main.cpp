@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "Game.h"
 
 int main()
 {
@@ -16,6 +17,8 @@ int main()
     Player.setTexture(PlayerTexture);
     sf::Sprite Asteroid;
     Asteroid.setTexture(AsteroidTexture);
+
+    Game mainGame(window);
 
     while (window.isOpen())
     {
@@ -37,7 +40,7 @@ int main()
         // Game logic can go here
 
         // Player ship follows the mouse
-        sf::Vector2f MousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+        /*sf::Vector2f MousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
         Player.setPosition(MousePosition.x, MousePosition.y);
         window.draw(Player);
 
@@ -45,7 +48,10 @@ int main()
         Asteroid.setPosition(400, 400);
         float Rotation = 90.0f;
         Asteroid.rotate(Rotation * dt.asSeconds());
-        window.draw(Asteroid);
+        window.draw(Asteroid);*/
+
+        mainGame.Update(dt.asSeconds());
+        mainGame.Draw();
 
         //-----------------------------------------------------------------------------------
         // Display the updated game state
