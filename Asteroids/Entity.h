@@ -7,10 +7,15 @@ public:
 	virtual void Update(float DeltaTime) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 
-	std::string GetTag() const { return m_Tag; }
-	sf::Vector2f GetCurrentVelocity() const { return m_Velocity; }
+	const bool IsActive() const { return m_Active; }
+	void SetActive(const bool& status) { m_Active = status; }
+
+	const std::string GetTag() const { return m_Tag; }
+	const sf::Vector2f GetCurrentVelocity() const { return m_Velocity; }
 
 protected:
+	bool m_Active = true;
+
 	std::string m_Tag = "Entity";
 
 	sf::Vector2f m_Velocity;

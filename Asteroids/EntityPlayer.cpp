@@ -24,6 +24,7 @@ EntityPlayer::EntityPlayer() :
 	auto rect = m_Sprite.getGlobalBounds();
 	m_Sprite.setOrigin(rect.width * 0.5f, rect.height * 0.5f);
 
+	//Place this at Center of Screen
 	m_Position = sf::Vector2f(Game::s_MainWindow->getSize().x * 0.5f, Game::s_MainWindow->getSize().y * 0.5f);
 	m_Sprite.setPosition(m_Position);
 }

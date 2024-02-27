@@ -11,22 +11,39 @@ Game::Game(sf::RenderWindow& renderWindow) :
 {
 	s_MainWindow = &m_MainWindow;
 
-	m_Player = new EntityPlayer();
+	//m_Player = new EntityPlayer();
+	//m_EntitiesList.emplace_back(m_Player);
+
+	m_Player = SpawnEntity<EntityPlayer>();
 }
 
 Game::~Game()
 {
 	s_MainWindow = nullptr;
+	
+	for (auto i : m_EntitiesList)
+		delete i;
 
-	delete m_Player;
+	m_Player = nullptr;
 }
 
 void Game::Update(float DeltaTime)
 {
-	m_Player->Update(DeltaTime);
+	//m_Player->Update(DeltaTime);
+	for (auto i : m_EntitiesList)
+	{
+		if (!i->IsActive()) continue;
+
+		i->Update(DeltaTime);
+	}
 }
 
 void Game::Draw()
 {
-	m_MainWindow.draw(*m_Player);
+	for (auto i : m_EntitiesList)
+	{
+		if (!i->IsActive()) continue;
+
+		m_MainWindow.draw(*i);
+	}
 }
