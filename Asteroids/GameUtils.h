@@ -13,3 +13,11 @@ static void WrapCoordinates(const float& inputX, const float& inputY, float& out
 	if (outputY < 0.0f)			outputY = windowHeight;
 	if (outputY > windowHeight)	outputY = 0.0f;
 }
+
+static bool IsOutsideScreen(const float& inputX, const float& inputY, const float& windowWidth, const float& windowHeight)
+{
+	if (inputX < 0.0f || inputX > windowWidth) return true;
+	if (inputY < 0.0f || inputY > windowHeight) return true;
+
+	return false;
+}

@@ -80,16 +80,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EntitiesPool.cpp" />
     <ClCompile Include="EntityBullet.cpp" />
     <ClCompile Include="EntityPlayer.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameAssets.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EntitiesPool.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityBullet.h" />
     <ClInclude Include="EntityPlayer.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameAssets.h" />
     <ClInclude Include="GameUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

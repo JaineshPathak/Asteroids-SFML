@@ -1,8 +1,10 @@
-#include <iostream>
-
 #include "EntityPlayer.h"
+
+#include "EntityBullet.h"
 #include "Game.h"
 #include "GameUtils.h"
+#include "GameAssets.h"
+#include "EntitiesPool.h"
 
 EntityPlayer::EntityPlayer() :
 	m_Score(0),
@@ -14,19 +16,33 @@ EntityPlayer::EntityPlayer() :
 	m_TurningRate(200.0f),
 
 	m_IsThrust(false),
-	m_ThrustSpeed(5.0f)
+	m_ThrustSpeed(5.0f),
+
+	m_FireTimerCurrent(0.0f),
+	m_FireTimer(0.1f)
 {
 	m_Tag = "Player";
 
-	if (m_Texture.loadFromFile("Assets/Ship.png"))
-		m_Sprite.setTexture(m_Texture);
+	//if (m_Texture.loadFromFile("Assets/Ship.png"))
+		//m_Sprite.setTexture(m_Texture);
+	
+	m_Texture = GameAssets::Get()->GetPlayerTexture();
+	m_Sprite.setTexture(m_Texture);
 
+	Reset();
+}
+
+void EntityPlayer::Reset()
+{
 	auto rect = m_Sprite.getGlobalBounds();
 	m_Sprite.setOrigin(rect.width * 0.5f, rect.height * 0.5f);
 
-	//Place this at Center of Screen
 	m_Position = sf::Vector2f(Game::s_MainWindow->getSize().x * 0.5f, Game::s_MainWindow->getSize().y * 0.5f);
 	m_Sprite.setPosition(m_Position);
+
+	m_Velocity = sf::Vector2f(0.0f, 0.0f);
+
+	m_FireTimerCurrent = m_FireTimer;
 }
 
 void EntityPlayer::Update(float DeltaTime)
@@ -47,11 +63,41 @@ void EntityPlayer::Update(float DeltaTime)
 
 	m_Sprite.setRotation(m_Angle);
 	m_Sprite.setPosition(m_Position);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		m_FireTimerCurrent += DeltaTime;
+		if (m_FireTimerCurrent >= m_FireTimer)
+		{
+			EntityBullet* bullet = static_cast<EntityBullet*>(EntitiesPool::Get()->GetPooledEntity());
+			if (bullet)
+			{
+				bullet->SetActive(true);
+
+				sf::Vector2f bulletVel = bullet->GetCurrentVelocity();
+				bulletVel.x = std::sin(m_Angle * DEGTORAD) * 0.75f;
+				bulletVel.y = -std::cos(m_Angle * DEGTORAD) * 0.75f;
+
+				bullet->SetPosition(m_Sprite.getPosition());
+				bullet->SetCurrentVelocity(bulletVel);
+
+				m_FireTimerCurrent = 0.0f;
+			}
+		}
+	}
+	else
+		m_FireTimerCurrent = m_FireTimer;
 }
 
 void EntityPlayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(m_Sprite);
+}
+
+void EntityPlayer::OnCollision(Entity* OtherEntity)
+{
+	if (OtherEntity->GetTag() == "Asteroid")
+		ApplyDamage();
 }
 
 void EntityPlayer::ApplyDamage()

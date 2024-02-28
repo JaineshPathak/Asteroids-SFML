@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "GameAssets.h"
 #include "Game.h"
 
 int main()
@@ -7,7 +8,7 @@ int main()
     sf::Clock GameClock;
 
     // Grab textures and set up sprites
-    sf::Texture PlayerTexture;
+    /*sf::Texture PlayerTexture;
     sf::Texture AsteroidTexture;
 
     PlayerTexture.loadFromFile("Assets/Ship.png");
@@ -16,8 +17,9 @@ int main()
     sf::Sprite Player;
     Player.setTexture(PlayerTexture);
     sf::Sprite Asteroid;
-    Asteroid.setTexture(AsteroidTexture);
+    Asteroid.setTexture(AsteroidTexture);*/
 
+    GameAssets gameAssets;
     Game mainGame(window);
 
     while (window.isOpen())

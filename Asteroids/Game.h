@@ -1,9 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <iostream>
 
 class Entity;
 class EntityPlayer;
+class EntitiesPool;
 class Game
 {
 public:
@@ -14,11 +16,13 @@ public:
 	void Draw();
 
 	template<typename T>
-	T* SpawnEntity()
+	static T* SpawnEntity()
 	{
 		T* tE = new T();
-		if(tE) m_EntitiesList.emplace_back(tE);
-
+		
+		if (static_cast<Entity*>(tE) != nullptr)
+			s_EntitiesList.push_back(tE);
+		
 		return tE;
 	}
 
@@ -29,6 +33,8 @@ public:
 	static sf::RenderWindow* s_MainWindow;
 
 private:
-	std::vector<Entity*> m_EntitiesList;
-	EntityPlayer* m_Player;
+	static std::vector<Entity*> s_EntitiesList;
+
+	std::vector<Entity*> m_EntitiesActiveList;
+	EntitiesPool* m_EntitiesPool;
 };

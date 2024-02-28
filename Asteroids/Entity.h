@@ -4,13 +4,22 @@
 class Entity : public sf::Drawable, public sf::Transformable
 {
 public:
+	virtual ~Entity() {};
+
+	virtual void Reset() = 0;
 	virtual void Update(float DeltaTime) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
+	
+	virtual void OnCollision(Entity* OtherEntity) = 0;
 
 	const bool IsActive() const { return m_Active; }
 	void SetActive(const bool& status) { m_Active = status; }
 
 	const std::string GetTag() const { return m_Tag; }
+
+	void SetPosition(const sf::Vector2f& newPos) { m_Position = newPos; }
+
+	void SetCurrentVelocity(const sf::Vector2f& newVelocity) { m_Velocity = newVelocity; }
 	const sf::Vector2f GetCurrentVelocity() const { return m_Velocity; }
 
 protected:
