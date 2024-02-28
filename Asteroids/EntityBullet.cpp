@@ -4,11 +4,14 @@
 #include "GameAssets.h"
 #include "GameUtils.h"
 
+#include "EntityAsteroid.h"
+
 EntityBullet::EntityBullet()
 {
-	m_Tag = "Projectile";
+	m_Tag = GameData::BulletTag;
 
 	m_Texture = GameAssets::Get()->GetAsteroidTexture();
+	
 	m_Sprite.setTexture(m_Texture);
 	m_Sprite.setColor(sf::Color::Yellow);
 
@@ -29,7 +32,7 @@ void EntityBullet::Update(float DeltaTime)
 {
 	m_Position += m_Velocity;
 
-	if (IsActive() && IsOutsideScreen(m_Position.x, m_Position.y, (float)Game::s_MainWindow->getSize().x, (float)Game::s_MainWindow->getSize().y))
+	if (IsActive() && GameUtils::IsOutsideScreen(m_Position.x, m_Position.y, (float)Game::s_MainWindow->getSize().x, (float)Game::s_MainWindow->getSize().y))
 		SetActive(false);
 
 	m_Sprite.setPosition(m_Position);
@@ -44,8 +47,12 @@ void EntityBullet::OnCollision(Entity* OtherEntity)
 {
 	//TODO: Asteroid Splitting
 	//TODO: Player Score Increments
-	if (OtherEntity->GetTag() == "Asteroid")
-	{
 
+	//Is it an Asteroid?
+	EntityAsteroid* rock = dynamic_cast<EntityAsteroid*>(OtherEntity);
+	if (rock)
+	{
+		OtherEntity->SetActive(false);
+		SetActive(false);
 	}
 }

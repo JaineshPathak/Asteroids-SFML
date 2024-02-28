@@ -21,13 +21,17 @@ EntityPlayer::EntityPlayer() :
 	m_FireTimerCurrent(0.0f),
 	m_FireTimer(0.1f)
 {
-	m_Tag = "Player";
+	m_Tag = GameData::PlayerTag;
 
 	//if (m_Texture.loadFromFile("Assets/Ship.png"))
 		//m_Sprite.setTexture(m_Texture);
 	
 	m_Texture = GameAssets::Get()->GetPlayerTexture();
+	
 	m_Sprite.setTexture(m_Texture);
+	m_Sprite.setColor(sf::Color::Blue);
+
+	//m_BoundingRadius = m_Sprite.getGlobalBounds().getSize();
 
 	Reset();
 }
@@ -53,13 +57,13 @@ void EntityPlayer::Update(float DeltaTime)
 	m_IsThrust = (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W));
 	if (m_IsThrust)
 	{
-		m_Velocity.x += std::sin(m_Angle * DEGTORAD) * 0.2f * DeltaTime;
-		m_Velocity.y += -std::cos(m_Angle * DEGTORAD) * 0.2f * DeltaTime;
+		m_Velocity.x += std::sin(m_Angle * GameUtils::DEGTORAD) * 0.2f * DeltaTime;
+		m_Velocity.y += -std::cos(m_Angle * GameUtils::DEGTORAD) * 0.2f * DeltaTime;
 	}
 
 	m_Position += m_Velocity;
 	
-	WrapCoordinates(m_Position.x, m_Position.y, m_Position.x, m_Position.y, (float)Game::s_MainWindow->getSize().x, (float)Game::s_MainWindow->getSize().y);
+	GameUtils::WrapCoordinates(m_Position.x, m_Position.y, m_Position.x, m_Position.y, (float)Game::s_MainWindow->getSize().x, (float)Game::s_MainWindow->getSize().y);
 
 	m_Sprite.setRotation(m_Angle);
 	m_Sprite.setPosition(m_Position);
@@ -69,14 +73,14 @@ void EntityPlayer::Update(float DeltaTime)
 		m_FireTimerCurrent += DeltaTime;
 		if (m_FireTimerCurrent >= m_FireTimer)
 		{
-			EntityBullet* bullet = static_cast<EntityBullet*>(EntitiesPool::Get()->GetPooledEntity());
+			EntityBullet* bullet = static_cast<EntityBullet*>(EntitiesPool::Get()->GetPooledEntity(EPT_Bullet));
 			if (bullet)
 			{
 				bullet->SetActive(true);
 
 				sf::Vector2f bulletVel = bullet->GetCurrentVelocity();
-				bulletVel.x = std::sin(m_Angle * DEGTORAD) * 0.75f;
-				bulletVel.y = -std::cos(m_Angle * DEGTORAD) * 0.75f;
+				bulletVel.x = std::sin(m_Angle * GameUtils::DEGTORAD) * 0.75f;
+				bulletVel.y = -std::cos(m_Angle * GameUtils::DEGTORAD) * 0.75f;
 
 				bullet->SetPosition(m_Sprite.getPosition());
 				bullet->SetCurrentVelocity(bulletVel);
@@ -96,7 +100,7 @@ void EntityPlayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void EntityPlayer::OnCollision(Entity* OtherEntity)
 {
-	if (OtherEntity->GetTag() == "Asteroid")
+	if (OtherEntity->GetTag() == GameData::AsteroidTag)
 		ApplyDamage();
 }
 
@@ -105,4 +109,7 @@ void EntityPlayer::ApplyDamage()
 	if (m_Lives <= 0) return;
 
 	m_Lives--;
+
+	if (m_Lives <= 0)
+		std::cout << "I am Dead!" << std::endl;
 }

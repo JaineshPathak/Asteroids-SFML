@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EntitiesPool.cpp" />
+    <ClCompile Include="EntityAsteroid.cpp" />
     <ClCompile Include="EntityBullet.cpp" />
     <ClCompile Include="EntityPlayer.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -90,6 +91,7 @@
   <ItemGroup>
     <ClInclude Include="EntitiesPool.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityAsteroid.h" />
     <ClInclude Include="EntityBullet.h" />
     <ClInclude Include="EntityPlayer.h" />
     <ClInclude Include="Game.h" />

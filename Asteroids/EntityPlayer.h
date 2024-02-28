@@ -14,10 +14,6 @@ public:
 
 	void ApplyDamage();
 
-protected:
-	sf::Sprite m_Sprite;
-	sf::Texture m_Texture;
-
 private:
 	int m_Score;
 

@@ -22,11 +22,17 @@ public:
 	void SetCurrentVelocity(const sf::Vector2f& newVelocity) { m_Velocity = newVelocity; }
 	const sf::Vector2f GetCurrentVelocity() const { return m_Velocity; }
 
+	const sf::Sprite GetSprite() const { return m_Sprite; }
+
 protected:
 	bool m_Active = true;
+	float m_BoundingRadius;
 
 	std::string m_Tag = "Entity";
 
 	sf::Vector2f m_Velocity;
 	sf::Vector2f m_Position;
+
+	sf::Sprite m_Sprite;
+	sf::Texture m_Texture;
 };
