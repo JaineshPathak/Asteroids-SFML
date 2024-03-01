@@ -86,6 +86,7 @@
     <ClCompile Include="EntityPlayer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameAssets.cpp" />
+    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -96,7 +97,9 @@
     <ClInclude Include="EntityPlayer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameAssets.h" />
+    <ClInclude Include="GameUI.h" />
     <ClInclude Include="GameUtils.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

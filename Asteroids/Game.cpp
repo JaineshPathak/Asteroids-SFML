@@ -6,6 +6,9 @@
 #include "EntityAsteroid.h"
 #include "EntitiesPool.h"
 
+#include "GameUI.h"
+
+Game* Game::s_Instance = nullptr;
 sf::RenderWindow* Game::s_MainWindow = nullptr;
 std::vector<Entity*> Game::s_EntitiesList;
 
@@ -16,32 +19,23 @@ const std::string GameData::AsteroidTag = "Asteroid";
 Game::Game(sf::RenderWindow& renderWindow) : 
 	m_MainWindow(renderWindow)
 {
+	s_Instance = this;
 	s_MainWindow = &m_MainWindow;
 
-	Game::SpawnEntity<EntityPlayer>();
+	//Create Player
+	m_EntityPlayer = Game::SpawnEntity<EntityPlayer>();
+
+	//Create UI
+	m_GameUI = new GameUI(m_MainWindow, *m_EntityPlayer);
 	
+	//Create Pool of Entities like Bullets/Asteroids
 	m_EntitiesPool = new EntitiesPool();
 
-	//Spawn a Random Asteroid
+	//Spawn 5 Random Asteroids
 	for (int i = 0; i < 5; i++)
-	{
-		EntityAsteroid* Rock = static_cast<EntityAsteroid*>(m_EntitiesPool->GetPooledEntity(EPT_Asteroid));
-		if (Rock)
-		{
-			Rock->SetActive(true);
+		SpawnAsteroid();
 
-			sf::Vector2f newPos;
-			newPos.x = GameUtils::RandF(0.0f, (float)m_MainWindow.getSize().x);
-			newPos.y = GameUtils::RandF(0.0f, (float)m_MainWindow.getSize().y);
-
-			sf::Vector2f newVel;
-			newVel.x = GameUtils::RandF(-0.1f, 0.1f);
-			newVel.y = GameUtils::RandF(-0.1f, 0.1f);
-		
-			Rock->SetPosition(newPos);
-			Rock->SetCurrentVelocity(newVel);
-		}
-	}
+	std::cout << "Game: Ready!" << std::endl;
 }
 
 Game::~Game()
@@ -52,9 +46,18 @@ Game::~Game()
 	m_EntitiesPool = nullptr;
 
 	for (auto i : s_EntitiesList)
+	{
 		delete i;
+		i = nullptr;
+	}
 
+	m_EntityPlayer = nullptr;
+
+	s_EntitiesList.clear();
 	m_EntitiesActiveList.clear();
+
+	delete m_GameUI;
+	m_GameUI = nullptr;
 }
 
 void Game::Update(float DeltaTime)
@@ -83,10 +86,12 @@ void Game::Update(float DeltaTime)
 			{
 				//std::cout << "Collision of A: " << eA->GetTag() << " with B: " << eB->GetTag() << std::endl;
 				eA->OnCollision(eB);
-				eB->OnCollision(eA);
+				//dddeB->OnCollision(eA);
 			}
 		}
 	}
+
+	m_GameUI->Update();
 }
 
 void Game::Draw()
@@ -94,4 +99,51 @@ void Game::Draw()
 	//Only Draw Active Entities
 	for (auto& i : m_EntitiesActiveList)
 		m_MainWindow.draw(*i);
+
+	m_GameUI->Draw();
+}
+
+//Called when a small Asteroid is destroyed. So resets its type to random type and start spawning new Asteroids 
+void Game::OnAsteroidDestroyed(EntityAsteroid& enAsteroid)
+{
+	enAsteroid.SetType(GameUtils::RandI(1, 4));
+
+	SpawnAsteroid(true);
+}
+
+void Game::OnPlayerDeath()
+{
+	m_EntityPlayer->SetActive(false);
+}
+
+void Game::SpawnAsteroid(bool shouldReset)
+{
+	EntityAsteroid* Rock = static_cast<EntityAsteroid*>(m_EntitiesPool->GetPooledEntity(EPT_Asteroid));
+	if (Rock)
+	{
+		Rock->SetActive(true);
+
+		if (shouldReset) Rock->Reset();
+
+		//Set the position of random outside screen
+		sf::Vector2f newPos;
+		GameUtils::SetPosRandomOutsideScreen(newPos.x, newPos.y, (float)m_MainWindow.getSize().x, (float)m_MainWindow.getSize().y);
+
+		//Get random in-screen Position
+		sf::Vector2f randScreenPos;
+		GameUtils::GetPosRandomInsideScreen(randScreenPos.x, randScreenPos.y, (float)m_MainWindow.getSize().x, (float)m_MainWindow.getSize().y);
+
+		//Get the Direction from Asteroid off-Screen Position to random in-Screen Position
+		sf::Vector2f newVel;
+		newVel.x = randScreenPos.x - newPos.x;
+		newVel.y = randScreenPos.y - newPos.y;
+
+		//Normalise the Direction
+		float len = sqrt((newVel.x * newVel.x) + (newVel.y * newVel.y));
+		newVel.x /= len;
+		newVel.y /= len;
+
+		Rock->SetPosition(newPos);
+		Rock->SetCurrentVelocity(newVel * 0.1f);
+	}
 }

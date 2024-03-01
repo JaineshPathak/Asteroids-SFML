@@ -5,6 +5,7 @@
 #include "GameUtils.h"
 
 #include "EntityAsteroid.h"
+#include "EntityPlayer.h"
 
 EntityBullet::EntityBullet()
 {
@@ -20,8 +21,13 @@ EntityBullet::EntityBullet()
 
 void EntityBullet::Reset()
 {
-	auto rect = m_Sprite.getGlobalBounds();
-	m_Sprite.setOrigin(rect.width * 0.5f, rect.height * 0.5f);
+	if (!m_HasResetOrigin)
+	{
+		auto rect = m_Sprite.getGlobalBounds();
+		m_Sprite.setOrigin(rect.width * 0.5f, rect.height * 0.5f);
+
+		m_HasResetOrigin = true;
+	}
 
 	m_Sprite.setScale(m_Sprite.getScale() * 0.3f);
 
@@ -45,14 +51,23 @@ void EntityBullet::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void EntityBullet::OnCollision(Entity* OtherEntity)
 {
-	//TODO: Asteroid Splitting
-	//TODO: Player Score Increments
-
 	//Is it an Asteroid?
 	EntityAsteroid* rock = dynamic_cast<EntityAsteroid*>(OtherEntity);
 	if (rock)
 	{
-		OtherEntity->SetActive(false);
+		if (m_EntityPlayerOwner)
+			m_EntityPlayerOwner->AddScore(rock->GetType());
+
+		rock->Split();
+
 		SetActive(false);
 	}
+}
+
+void EntityBullet::SetOwner(Entity* newOwner)
+{
+	Entity::SetOwner(newOwner);
+
+	if (m_EntityOwner != nullptr)
+		m_EntityPlayerOwner = (EntityPlayer*)m_EntityOwner;
 }

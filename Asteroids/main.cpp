@@ -7,19 +7,6 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 800), "LHG Code Exercise");
     sf::Clock GameClock;
 
-    // Grab textures and set up sprites
-    /*sf::Texture PlayerTexture;
-    sf::Texture AsteroidTexture;
-
-    PlayerTexture.loadFromFile("Assets/Ship.png");
-    AsteroidTexture.loadFromFile("Assets/Asteroid.png");
-
-    sf::Sprite Player;
-    Player.setTexture(PlayerTexture);
-    sf::Sprite Asteroid;
-    Asteroid.setTexture(AsteroidTexture);*/
-
-    GameAssets gameAssets;
     Game mainGame(window);
 
     while (window.isOpen())
@@ -39,18 +26,7 @@ int main()
         window.clear();
 
         //-----------------------------------------------------------------------------------
-        // Game logic can go here
-
-        // Player ship follows the mouse
-        /*sf::Vector2f MousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
-        Player.setPosition(MousePosition.x, MousePosition.y);
-        window.draw(Player);
-
-        // Asteroid spins in the center of the screen
-        Asteroid.setPosition(400, 400);
-        float Rotation = 90.0f;
-        Asteroid.rotate(Rotation * dt.asSeconds());
-        window.draw(Asteroid);*/
+        // Game logic can go here      
 
         mainGame.Update(dt.asSeconds());
         mainGame.Draw();

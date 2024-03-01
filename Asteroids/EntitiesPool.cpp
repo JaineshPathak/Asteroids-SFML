@@ -20,6 +20,7 @@ EntitiesPool::EntitiesPool()
 	{
 		Entity* e = Game::SpawnEntity<EntityBullet>();
 		e->SetActive(false);
+		e->SetOwner((Entity*)(Game::Get()->GetPlayer()));
 
 		m_BulletsPool.push_back(e);
 	}
