@@ -39,6 +39,12 @@
     <ClCompile Include="GameUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EntityExplosion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PushdownMachine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -69,6 +75,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityExplosion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PushdownMachine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PushdownState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

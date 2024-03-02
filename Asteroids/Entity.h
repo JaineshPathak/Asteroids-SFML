@@ -15,8 +15,6 @@ public:
 	const bool IsActive() const { return m_Active; }
 	void SetActive(const bool& status) { m_Active = status; }
 
-	const std::string GetTag() const { return m_Tag; }
-
 	Entity* GetOwner() const { return m_EntityOwner; }
 	virtual void SetOwner(Entity* newOwner) { m_EntityOwner = newOwner; }
 
@@ -34,7 +32,6 @@ protected:
 	bool m_Active = true;
 	float m_BoundingRadius = 0.0f;
 
-	std::string m_Tag = "Entity";
 	Entity* m_EntityOwner;
 
 	sf::Vector2f m_Velocity;

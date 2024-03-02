@@ -12,10 +12,6 @@ Game* Game::s_Instance = nullptr;
 sf::RenderWindow* Game::s_MainWindow = nullptr;
 std::vector<Entity*> Game::s_EntitiesList;
 
-const std::string GameData::PlayerTag = "Player";
-const std::string GameData::BulletTag = "Bullet";
-const std::string GameData::AsteroidTag = "Asteroid";
-
 Game::Game(sf::RenderWindow& renderWindow) : 
 	m_MainWindow(renderWindow)
 {

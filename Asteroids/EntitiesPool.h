@@ -2,12 +2,12 @@
 #include <vector>
 
 class Entity;
-class EntityBullet;
 
 enum EntityPoolType
 {
 	EPT_Bullet,
-	EPT_Asteroid
+	EPT_Asteroid,
+	EPT_Explosion
 };
 
 class EntitiesPool
@@ -29,6 +29,7 @@ public:
 private:
 	std::vector<Entity*> m_BulletsPool;
 	std::vector<Entity*> m_AsteroidsPool;
+	std::vector<Entity*> m_ExplosionsPool;
 
 	static EntitiesPool* s_Instance;
 };

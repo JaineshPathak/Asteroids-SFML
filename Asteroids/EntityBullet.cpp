@@ -6,11 +6,11 @@
 
 #include "EntityAsteroid.h"
 #include "EntityPlayer.h"
+#include "EntityExplosion.h"
+#include "EntitiesPool.h"
 
 EntityBullet::EntityBullet()
 {
-	m_Tag = GameData::BulletTag;
-
 	m_Texture = GameAssets::Get()->GetAsteroidTexture();
 	
 	m_Sprite.setTexture(m_Texture);
@@ -57,6 +57,16 @@ void EntityBullet::OnCollision(Entity* OtherEntity)
 	{
 		if (m_EntityPlayerOwner)
 			m_EntityPlayerOwner->AddScore(rock->GetType());
+
+		//Spawn an Explosion
+		EntityExplosion* explosion = static_cast<EntityExplosion*>(EntitiesPool::Get()->GetPooledEntity(EPT_Explosion));
+		if (explosion)
+		{
+			explosion->SetActive(true);
+			explosion->Reset();
+			explosion->SetPosition(rock->GetSprite().getPosition());
+			explosion->PlayExplosion((float)rock->GetType());
+		}
 
 		rock->Split();
 

@@ -30,7 +30,6 @@ EntityPlayer::EntityPlayer() :
 
 	m_DefaultColor(sf::Color::White)
 {
-	m_Tag = GameData::PlayerTag;
 	m_DefaultColor = sf::Color::Blue;
 
 	m_Texture = GameAssets::Get()->GetPlayerTexture();

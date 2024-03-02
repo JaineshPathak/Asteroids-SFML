@@ -83,22 +83,27 @@
     <ClCompile Include="EntitiesPool.cpp" />
     <ClCompile Include="EntityAsteroid.cpp" />
     <ClCompile Include="EntityBullet.cpp" />
+    <ClCompile Include="EntityExplosion.cpp" />
     <ClCompile Include="EntityPlayer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameAssets.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PushdownMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EntitiesPool.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityAsteroid.h" />
     <ClInclude Include="EntityBullet.h" />
+    <ClInclude Include="EntityExplosion.h" />
     <ClInclude Include="EntityPlayer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameAssets.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="GameUtils.h" />
+    <ClInclude Include="PushdownMachine.h" />
+    <ClInclude Include="PushdownState.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

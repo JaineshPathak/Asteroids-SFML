@@ -10,8 +10,6 @@ EntityAsteroid::EntityAsteroid() :
 	m_Type(3),
 	m_HasEnteredScreen(false)
 {
-	m_Tag = GameData::AsteroidTag;
-
 	m_Texture = GameAssets::Get()->GetAsteroidTexture();
 	
 	m_Sprite.setTexture(m_Texture);

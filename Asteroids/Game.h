@@ -3,13 +3,6 @@
 #include <vector>
 #include <iostream>
 
-struct GameData
-{
-	static const std::string PlayerTag;
-	static const std::string BulletTag;
-	static const std::string AsteroidTag;
-};
-
 class Entity;
 class EntityPlayer;
 class EntityAsteroid;

@@ -89,4 +89,9 @@ namespace GameUtils
 
 		return (int)dis(gen);
 	}
+
+	static float Lerp(const float& start, const float& end, const float& time)
+	{
+		return start + (end - start) * time;
+	}
 }
