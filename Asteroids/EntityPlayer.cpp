@@ -6,6 +6,7 @@
 
 #include "EntityAsteroid.h"
 #include "EntityBullet.h"
+#include "EntityExplosion.h"
 #include "EntitiesPool.h"
 
 EntityPlayer::EntityPlayer() :
@@ -148,6 +149,16 @@ void EntityPlayer::ApplyDamage()
 	m_Lives--;
 	if (m_Lives <= 0)
 	{
+		//Spawn an Explosion
+		EntityExplosion* explosion = static_cast<EntityExplosion*>(EntitiesPool::Get()->GetPooledEntity(EPT_Explosion));
+		if (explosion)
+		{
+			explosion->SetActive(true);
+			explosion->Reset();
+			explosion->SetPosition(m_Sprite.getPosition());
+			explosion->PlayExplosion(2.0f);
+		}
+
 		Game::Get()->OnPlayerDeath();
 		return;
 	}

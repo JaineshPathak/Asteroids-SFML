@@ -10,7 +10,7 @@ public:
 	virtual void Update(float DeltaTime) override;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	void PlayExplosion(const float& explosionMultiplier = 1.0f);
+	void PlayExplosion(const float& explosionScaleMultiplier = 1.0f);
 
 private:
 	bool m_IsPlaying;

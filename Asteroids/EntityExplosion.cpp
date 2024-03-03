@@ -74,8 +74,8 @@ void EntityExplosion::draw(sf::RenderTarget& target, sf::RenderStates states) co
 	target.draw(m_Sprite);
 }
 
-void EntityExplosion::PlayExplosion(const float& explosionMultiplier)
+void EntityExplosion::PlayExplosion(const float& explosionScaleMultiplier)
 {
-	m_ExplosionScaleMultiplier = explosionMultiplier;
+	m_ExplosionScaleMultiplier = explosionScaleMultiplier;
 	m_IsPlaying = true;
 }
