@@ -11,12 +11,12 @@ PushdownMachine::~PushdownMachine()
 {
 }
 
-bool PushdownMachine::Update(float dt) 
+bool PushdownMachine::Update(float DeltaTime)
 {
 	if (m_ActiveState) 
 	{
 		PushdownState* newState = nullptr;
-		PushdownState::PushdownResult result = m_ActiveState->OnUpdate(dt, &newState);
+		PushdownState::PushdownResult result = m_ActiveState->OnUpdate(DeltaTime, &newState);
 
 		switch (result) 
 		{
@@ -56,4 +56,11 @@ bool PushdownMachine::Update(float dt)
 	}
 
 	return true;
+}
+
+void PushdownMachine::Draw()
+{
+	if (!m_ActiveState) return;
+
+	m_ActiveState->OnDraw();
 }

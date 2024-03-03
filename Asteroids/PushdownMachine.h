@@ -10,6 +10,7 @@ public:
 	~PushdownMachine();
 
 	bool Update(float dt);
+	void Draw();
 
 protected:
 	PushdownState* m_ActiveState;

@@ -87,6 +87,8 @@
     <ClCompile Include="EntityPlayer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameAssets.cpp" />
+    <ClCompile Include="GameIntroUI.cpp" />
+    <ClCompile Include="GamePauseUI.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PushdownMachine.cpp" />
@@ -100,11 +102,12 @@
     <ClInclude Include="EntityPlayer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameAssets.h" />
+    <ClInclude Include="GameIntroUI.h" />
+    <ClInclude Include="GamePauseUI.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="GameUtils.h" />
     <ClInclude Include="PushdownMachine.h" />
     <ClInclude Include="PushdownState.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

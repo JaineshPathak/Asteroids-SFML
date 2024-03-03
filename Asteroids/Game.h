@@ -1,4 +1,5 @@
 #pragma once
+#include "PushdownState.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
@@ -9,7 +10,7 @@ class EntityAsteroid;
 class EntitiesPool;
 class GameUI;
 
-class Game
+class Game : public PushdownState
 {
 public:
 	Game(sf::RenderWindow& renderWindow);
@@ -17,8 +18,8 @@ public:
 
 	static Game* Get() { return s_Instance; }
 
-	void Update(float DeltaTime);
-	void Draw();
+	virtual PushdownResult OnUpdate(float dt, PushdownState** newState) override;
+	virtual void OnDraw() override;
 
 	template<typename T>
 	static T* SpawnEntity()
@@ -49,8 +50,12 @@ private:
 	static std::vector<Entity*> s_EntitiesList;
 	std::vector<Entity*> m_EntitiesActiveList;
 
-	EntityPlayer* m_EntityPlayer;
 	EntitiesPool* m_EntitiesPool;
+
+	EntityPlayer* m_EntityPlayer;
+	bool m_IsPlayerDead;
+	float m_ReturnToTimer;
+	float m_ReturnToTimerCurrent;
 
 	GameUI* m_GameUI;
 };

@@ -1,19 +1,25 @@
 #include <iostream>
 
 #include "Game.h"
+#include "GameIntroUI.h"
+#include "GamePauseUI.h"
+#include "GameUI.h"
 #include "GameUtils.h"
+
 #include "EntityPlayer.h"
 #include "EntityAsteroid.h"
 #include "EntitiesPool.h"
 
-#include "GameUI.h"
 
 Game* Game::s_Instance = nullptr;
 sf::RenderWindow* Game::s_MainWindow = nullptr;
 std::vector<Entity*> Game::s_EntitiesList;
 
 Game::Game(sf::RenderWindow& renderWindow) : 
-	m_MainWindow(renderWindow)
+	m_MainWindow(renderWindow),
+	m_IsPlayerDead(false),
+	m_ReturnToTimer(2.0f),
+	m_ReturnToTimerCurrent(0.0f)
 {
 	s_Instance = this;
 	s_MainWindow = &m_MainWindow;
@@ -56,7 +62,7 @@ Game::~Game()
 	m_GameUI = nullptr;
 }
 
-void Game::Update(float DeltaTime)
+/*void Game::Update(float DeltaTime)
 {
 	m_EntitiesActiveList.clear();
 
@@ -88,9 +94,72 @@ void Game::Update(float DeltaTime)
 	}
 
 	m_GameUI->Update();
+}*/
+
+/*void Game::Draw()
+{
+	//Only Draw Active Entities
+	for (auto& i : m_EntitiesActiveList)
+		m_MainWindow.draw(*i);
+
+	m_GameUI->Draw();
+}*/
+
+PushdownState::PushdownResult Game::OnUpdate(float DeltaTime, PushdownState** newState)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Escape) && !m_IsPlayerDead)
+	{
+		*newState = new GamePauseUI(m_MainWindow, *m_EntityPlayer);
+		return PushdownResult::PR_Push;
+	}
+
+	if (m_IsPlayerDead)
+	{
+		m_ReturnToTimerCurrent += DeltaTime;
+		if (m_ReturnToTimerCurrent >= m_ReturnToTimer)
+		{
+			m_ReturnToTimerCurrent = 0.0f;
+
+			*newState = new GameIntroUI(m_MainWindow);
+			return PushdownResult::PR_Pop;
+		}
+	}
+
+	m_EntitiesActiveList.clear();
+
+	//Populate list of active entities
+	for (auto it = s_EntitiesList.begin(); it != s_EntitiesList.end(); ++it)
+	{
+		Entity* e = *it;
+
+		if (e->IsActive())
+			m_EntitiesActiveList.push_back(e);
+	}
+
+	//Update entities that are Active
+	for (auto& e : m_EntitiesActiveList)
+		e->Update(DeltaTime);
+
+	//Check for Collisions
+	for (auto& eA : m_EntitiesActiveList)
+	{
+		for (auto& eB : m_EntitiesActiveList)
+		{
+			if (eA != eB && eA->GetSprite().getGlobalBounds().intersects(eB->GetSprite().getGlobalBounds()))
+			{
+				//std::cout << "Collision of A: " << eA->GetTag() << " with B: " << eB->GetTag() << std::endl;
+				eA->OnCollision(eB);
+				//dddeB->OnCollision(eA);
+			}
+		}
+	}
+
+	m_GameUI->Update();
+
+	return PushdownResult::PR_NoChange;
 }
 
-void Game::Draw()
+void Game::OnDraw()
 {
 	//Only Draw Active Entities
 	for (auto& i : m_EntitiesActiveList)
@@ -109,6 +178,9 @@ void Game::OnAsteroidDestroyed(EntityAsteroid& enAsteroid)
 
 void Game::OnPlayerDeath()
 {
+	m_ReturnToTimerCurrent = 0.0f;
+
+	m_IsPlayerDead = true;
 	m_EntityPlayer->SetActive(false);
 }
 

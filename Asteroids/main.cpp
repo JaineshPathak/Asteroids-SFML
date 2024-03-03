@@ -1,13 +1,12 @@
-#include <SFML/Graphics.hpp>
-#include "GameAssets.h"
-#include "Game.h"
+#include "PushdownMachine.h"
+#include "GameIntroUI.h"
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 800), "LHG Code Exercise");
     sf::Clock GameClock;
 
-    Game mainGame(window);
+    PushdownMachine mainGameMachine(new GameIntroUI(window));
 
     while (window.isOpen())
     {
@@ -28,8 +27,8 @@ int main()
         //-----------------------------------------------------------------------------------
         // Game logic can go here      
 
-        mainGame.Update(dt.asSeconds());
-        mainGame.Draw();
+        if (mainGameMachine.Update(dt.asSeconds()))
+            mainGameMachine.Draw();
 
         //-----------------------------------------------------------------------------------
         // Display the updated game state
