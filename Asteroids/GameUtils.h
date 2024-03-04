@@ -3,6 +3,9 @@
 
 namespace GameUtils
 {
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+
 	const float DEGTORAD = 0.01745f;
 	const float RADTODEG = 57.2958f;
 
@@ -74,8 +77,6 @@ namespace GameUtils
 
 	static float RandF(const float& min, const float& max)
 	{
-		std::random_device rd;
-		std::mt19937 gen(rd());
 		std::uniform_real_distribution<> dis(min, max);
 
 		return (float)dis(gen);
@@ -83,11 +84,9 @@ namespace GameUtils
 
 	static int RandI(const int& min, const int& max)
 	{
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> dis(min, max);
+		std::uniform_int_distribution<> dis(min, max);
 
-		return (int)dis(gen);
+		return dis(gen);
 	}
 
 	static float Lerp(const float& start, const float& end, const float& time)

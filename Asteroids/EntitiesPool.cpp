@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-const int MAX_BULLETS = 100;
+const int MAX_BULLETS = 150;
 const int MAX_ASTEROIDS = 20;
 const int MAX_EXPLOSIONS = 20;
 

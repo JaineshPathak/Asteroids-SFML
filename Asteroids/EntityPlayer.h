@@ -14,9 +14,12 @@ public:
 	const int GetLivesCount() const { return m_Lives; }
 
 	const int GetScoreCount() const { return m_Score; }
-	void AddScore(const int& scoreAmount) { m_Score += scoreAmount; }
+	void AddScore(const int& scoreAmount);
 
 	void ApplyDamage();
+
+private:
+	void SpawnBullet(const sf::Vector2f& newBulletVel = sf::Vector2f(0.0f, 0.0f), const bool& velocityOverride = false);
 
 private:
 	int m_Score;
@@ -37,6 +40,10 @@ private:
 
 	float m_ImmuneTransparencyTimerCurrent;
 	float m_ImmuneTransparencyTimer;
+
+	bool m_IsOverPowered;
+	float m_OverPowerTimerCurrent;
+	float m_OverPowerTimer;
 
 	sf::Color m_DefaultColor;
 };

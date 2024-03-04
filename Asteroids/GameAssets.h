@@ -15,10 +15,10 @@ public:
 		return s_Instance;
 	}
 
-	inline const sf::Texture GetPlayerTexture() const { return m_PlayerTexture; }
-	inline const sf::Texture GetAsteroidTexture() const { return m_AsteroidTexture; }
+	inline sf::Texture GetPlayerTexture() const { return m_PlayerTexture; }
+	inline sf::Texture GetAsteroidTexture() const { return m_AsteroidTexture; }
 
-	inline const sf::Font GetGameFont() const { return m_GameFont; }
+	inline sf::Font GetGameFont() const { return m_GameFont; }
 
 private:
 	sf::Texture m_PlayerTexture;

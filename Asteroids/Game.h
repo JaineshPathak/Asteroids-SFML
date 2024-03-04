@@ -7,6 +7,7 @@
 class Entity;
 class EntityPlayer;
 class EntityAsteroid;
+class EntityPowerup;
 class EntitiesPool;
 class GameUI;
 
@@ -35,6 +36,7 @@ public:
 	EntityPlayer* GetPlayer() const { return m_EntityPlayer; }
 
 	void OnAsteroidDestroyed(EntityAsteroid& enAsteroid);
+	void OnPlayerScoreCentury();
 	void OnPlayerDeath();
 
 private:
@@ -51,6 +53,8 @@ private:
 	std::vector<Entity*> m_EntitiesActiveList;
 
 	EntitiesPool* m_EntitiesPool;
+
+	EntityPowerup* m_EntityPowerup;
 
 	EntityPlayer* m_EntityPlayer;
 	bool m_IsPlayerDead;

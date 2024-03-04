@@ -8,6 +8,7 @@
 
 #include "EntityPlayer.h"
 #include "EntityAsteroid.h"
+#include "EntityPowerup.h"
 #include "EntitiesPool.h"
 
 
@@ -27,10 +28,14 @@ Game::Game(sf::RenderWindow& renderWindow) :
 	//Create Player
 	m_EntityPlayer = Game::SpawnEntity<EntityPlayer>();
 
+	//Create a Powerup
+	m_EntityPowerup = Game::SpawnEntity<EntityPowerup>();
+	m_EntityPowerup->SetActive(false);
+
 	//Create UI
 	m_GameUI = new GameUI(m_MainWindow, *m_EntityPlayer);
 	
-	//Create Pool of Entities like Bullets/Asteroids
+	//Create Pool of Entities like Bullets, Asteroids, Explosions
 	m_EntitiesPool = new EntitiesPool();
 
 	//Spawn 5 Random Asteroids
@@ -174,6 +179,36 @@ void Game::OnAsteroidDestroyed(EntityAsteroid& enAsteroid)
 	enAsteroid.SetType(GameUtils::RandI(1, 4));
 
 	SpawnAsteroid(true);
+}
+
+//Called when player score a century (Score: 100, 200, etc). So spawn a Powerup
+void Game::OnPlayerScoreCentury()
+{
+	if (!m_EntityPowerup || m_EntityPowerup->IsActive()) return;
+
+	m_EntityPowerup->SetActive(true);
+	m_EntityPowerup->Reset();
+
+	//Set the position of random outside screen
+	sf::Vector2f newPos;
+	GameUtils::SetPosRandomOutsideScreen(newPos.x, newPos.y, (float)m_MainWindow.getSize().x, (float)m_MainWindow.getSize().y);
+
+	//Get random in-screen Position
+	sf::Vector2f randScreenPos;
+	GameUtils::GetPosRandomInsideScreen(randScreenPos.x, randScreenPos.y, (float)m_MainWindow.getSize().x, (float)m_MainWindow.getSize().y);
+
+	//Get the Direction from Asteroid off-Screen Position to random in-Screen Position
+	sf::Vector2f newVel;
+	newVel.x = randScreenPos.x - newPos.x;
+	newVel.y = randScreenPos.y - newPos.y;
+
+	//Normalise the Direction
+	float len = sqrt((newVel.x * newVel.x) + (newVel.y * newVel.y));
+	newVel.x /= len;
+	newVel.y /= len;
+
+	m_EntityPowerup->SetPosition(newPos);
+	m_EntityPowerup->SetCurrentVelocity(newVel * 0.1f);
 }
 
 void Game::OnPlayerDeath()

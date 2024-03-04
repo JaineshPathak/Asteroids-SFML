@@ -7,12 +7,13 @@
 #include "EntityAsteroid.h"
 #include "EntityBullet.h"
 #include "EntityExplosion.h"
+#include "EntityPowerup.h"
 #include "EntitiesPool.h"
 
 EntityPlayer::EntityPlayer() :
 	m_Score(0),
 	m_Lives(3),
-	
+
 	m_Angle(0.0f),
 	m_TurningRate(200.0f),
 
@@ -28,6 +29,10 @@ EntityPlayer::EntityPlayer() :
 
 	m_ImmuneTransparencyTimerCurrent(0.0),
 	m_ImmuneTransparencyTimer(0.1f),
+
+	m_IsOverPowered(false),
+	m_OverPowerTimerCurrent(0.0f),
+	m_OverPowerTimer(5.0f),
 
 	m_DefaultColor(sf::Color::White)
 {
@@ -65,6 +70,9 @@ void EntityPlayer::Update(float DeltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)	|| sf::Keyboard::isKeyPressed(sf::Keyboard::A))	m_Angle -= m_TurningRate * DeltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) m_Angle += m_TurningRate * DeltaTime;
 	
+	if (m_Angle < 0.0f)		m_Angle += 360.0f;
+	if (m_Angle > 360.0f)	m_Angle -= 360.0f;
+
 	m_IsThrust = (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W));
 	if (m_IsThrust)
 	{
@@ -79,24 +87,31 @@ void EntityPlayer::Update(float DeltaTime)
 	m_Sprite.setRotation(m_Angle);
 	m_Sprite.setPosition(m_Position);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !m_IsOverPowered)
 	{
 		m_FireTimerCurrent += DeltaTime;
 		if (m_FireTimerCurrent >= m_FireTimer)
 		{
-			EntityBullet* bullet = static_cast<EntityBullet*>(EntitiesPool::Get()->GetPooledEntity(EPT_Bullet));
-			if (bullet)
+			SpawnBullet();
+			m_FireTimerCurrent = 0.0f;
+		}
+	}
+	else if (m_IsOverPowered)
+	{
+		m_FireTimerCurrent += DeltaTime;
+		if (m_FireTimerCurrent >= (m_FireTimer * 2.5f))
+		{
+			m_FireTimerCurrent = 0.0f;
+			for (int i = 0; i < 6; i++)
 			{
-				bullet->SetActive(true);
+				float angle = 2.0f * 3.14f * (float)i / 6.0f;
+				angle += (m_Angle * GameUtils::DEGTORAD) * 3.14f;
 
-				sf::Vector2f bulletVel = bullet->GetCurrentVelocity();
-				bulletVel.x = std::sin(m_Angle * GameUtils::DEGTORAD) * 0.75f;
-				bulletVel.y = -std::cos(m_Angle * GameUtils::DEGTORAD) * 0.75f;
+				sf::Vector2f bulletAtAngleVel;
+				bulletAtAngleVel.x = std::sinf(angle) * 1.5f;
+				bulletAtAngleVel.y = -std::cosf(angle) * 1.5f;
 
-				bullet->SetPosition(m_Sprite.getPosition());
-				bullet->SetCurrentVelocity(bulletVel);
-
-				m_FireTimerCurrent = 0.0f;
+				SpawnBullet(bulletAtAngleVel, true);
 			}
 		}
 	}
@@ -127,6 +142,16 @@ void EntityPlayer::Update(float DeltaTime)
 			m_Sprite.setColor(m_DefaultColor);
 		}
 	}
+
+	if (m_IsOverPowered)
+	{
+		m_OverPowerTimerCurrent += DeltaTime;
+		if (m_OverPowerTimerCurrent >= m_OverPowerTimer)
+		{
+			m_IsOverPowered = false;
+			m_OverPowerTimerCurrent = 0.0f;
+		}
+	}
 }
 
 void EntityPlayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -138,8 +163,26 @@ void EntityPlayer::OnCollision(Entity* OtherEntity)
 {
 	//Is it an Asteroid?
 	EntityAsteroid* rock = dynamic_cast<EntityAsteroid*>(OtherEntity);
-	if (rock && !m_IsImmuneToDamage)
+	if (rock && !m_IsImmuneToDamage && !m_IsOverPowered)
 		ApplyDamage();
+
+	//Is it a Powerup?
+	EntityPowerup* powerup = dynamic_cast<EntityPowerup*>(OtherEntity);
+	if (powerup)
+	{
+		m_IsOverPowered = true;
+		m_OverPowerTimerCurrent = 0.0f;
+
+		powerup->SetActive(false);
+	}
+}
+
+void EntityPlayer::AddScore(const int& scoreAmount)
+{
+	m_Score += scoreAmount;
+
+	if ((m_Score % 2) == 0)
+		Game::Get()->OnPlayerScoreCentury();
 }
 
 void EntityPlayer::ApplyDamage()
@@ -167,4 +210,26 @@ void EntityPlayer::ApplyDamage()
 	m_IsImmuneToDamage = true;
 	
 	Reset();
+}
+
+void EntityPlayer::SpawnBullet(const sf::Vector2f& newBulletVel, const bool& velocityOverride)
+{
+	EntityBullet* bullet = static_cast<EntityBullet*>(EntitiesPool::Get()->GetPooledEntity(EPT_Bullet));
+	if (bullet)
+	{
+		bullet->SetActive(true);
+
+		if (!velocityOverride)
+		{
+			sf::Vector2f bulletVel = bullet->GetCurrentVelocity();
+			bulletVel.x = std::sinf(m_Angle * GameUtils::DEGTORAD) * 1.15f;
+			bulletVel.y = -std::cosf(m_Angle * GameUtils::DEGTORAD) * 1.15f;
+
+			bullet->SetCurrentVelocity(bulletVel);
+		}
+		else
+			bullet->SetCurrentVelocity(newBulletVel);
+
+		bullet->SetPosition(m_Sprite.getPosition());
+	}
 }

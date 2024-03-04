@@ -85,6 +85,7 @@
     <ClCompile Include="EntityBullet.cpp" />
     <ClCompile Include="EntityExplosion.cpp" />
     <ClCompile Include="EntityPlayer.cpp" />
+    <ClCompile Include="EntityPowerup.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameAssets.cpp" />
     <ClCompile Include="GameIntroUI.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="EntityBullet.h" />
     <ClInclude Include="EntityExplosion.h" />
     <ClInclude Include="EntityPlayer.h" />
+    <ClInclude Include="EntityPowerup.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameAssets.h" />
     <ClInclude Include="GameIntroUI.h" />
