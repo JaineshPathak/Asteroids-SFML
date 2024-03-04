@@ -181,7 +181,7 @@ void Game::OnAsteroidDestroyed(EntityAsteroid& enAsteroid)
 	SpawnAsteroid(true);
 }
 
-//Called when player score a century (Score: 100, 200, etc). So spawn a Powerup
+//Called when player score a half century (Score: 50, 100, etc). So spawn a Powerup
 void Game::OnPlayerScoreCentury()
 {
 	if (!m_EntityPowerup || m_EntityPowerup->IsActive()) return;
@@ -208,7 +208,7 @@ void Game::OnPlayerScoreCentury()
 	newVel.y /= len;
 
 	m_EntityPowerup->SetPosition(newPos);
-	m_EntityPowerup->SetCurrentVelocity(newVel * 0.1f);
+	m_EntityPowerup->SetVelocity(newVel * 0.1f);
 }
 
 void Game::OnPlayerDeath()
@@ -247,6 +247,6 @@ void Game::SpawnAsteroid(bool shouldReset)
 		newVel.y /= len;
 
 		Rock->SetPosition(newPos);
-		Rock->SetCurrentVelocity(newVel * 0.1f);
+		Rock->SetVelocity(newVel * 0.1f);
 	}
 }

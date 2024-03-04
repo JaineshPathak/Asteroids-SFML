@@ -89,7 +89,7 @@ void EntityAsteroid::Split()
 			newVel.x = GameUtils::RandF(-speedByType, speedByType);
 			newVel.y = GameUtils::RandF(-speedByType, speedByType);
 
-			Rock->SetCurrentVelocity(newVel);
+			Rock->SetVelocity(newVel);
 		}
 	}
 

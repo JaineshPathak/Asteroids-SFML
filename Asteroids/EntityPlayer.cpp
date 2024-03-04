@@ -181,7 +181,7 @@ void EntityPlayer::AddScore(const int& scoreAmount)
 {
 	m_Score += scoreAmount;
 
-	if ((m_Score % 2) == 0)
+	if ((m_Score % 50) == 0)
 		Game::Get()->OnPlayerScoreCentury();
 }
 
@@ -221,14 +221,14 @@ void EntityPlayer::SpawnBullet(const sf::Vector2f& newBulletVel, const bool& vel
 
 		if (!velocityOverride)
 		{
-			sf::Vector2f bulletVel = bullet->GetCurrentVelocity();
+			sf::Vector2f bulletVel = bullet->GetVelocity();
 			bulletVel.x = std::sinf(m_Angle * GameUtils::DEGTORAD) * 1.15f;
 			bulletVel.y = -std::cosf(m_Angle * GameUtils::DEGTORAD) * 1.15f;
 
-			bullet->SetCurrentVelocity(bulletVel);
+			bullet->SetVelocity(bulletVel);
 		}
 		else
-			bullet->SetCurrentVelocity(newBulletVel);
+			bullet->SetVelocity(newBulletVel);
 
 		bullet->SetPosition(m_Sprite.getPosition());
 	}

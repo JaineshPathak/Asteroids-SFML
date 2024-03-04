@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class Entity : public sf::Drawable, public sf::Transformable
+class Entity : public sf::Drawable
 {
 public:
 	virtual ~Entity() {};
@@ -20,8 +20,8 @@ public:
 
 	void SetPosition(const sf::Vector2f& newPos) { m_Position = newPos; }
 
-	void SetCurrentVelocity(const sf::Vector2f& newVelocity) { m_Velocity = newVelocity; }
-	const sf::Vector2f GetCurrentVelocity() const { return m_Velocity; }
+	void SetVelocity(const sf::Vector2f& newVelocity) { m_Velocity = newVelocity; }
+	const sf::Vector2f GetVelocity() const { return m_Velocity; }
 
 	const sf::Sprite GetSprite() const { return m_Sprite; }
 	const sf::Texture GetTexture() const { return m_Texture; }
